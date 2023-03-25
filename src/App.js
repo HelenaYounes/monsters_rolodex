@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './components/home/home';
 import SearchBox from './components/search-box/search-box';
 import CardList from './components/card-list/card-list';
 import './App.css';
@@ -8,10 +10,16 @@ const App = () => {
   const [searchField, setSearchField] = useState('');
   const [filteredMonsters, setFilteredMonsters] = useState(monsters);
 
+  // const fetchMonsters = async () => {
+  //   const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  //   const json = await response.json();
+  //   setMonsters(json);
+  // }
+
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(users => setMonsters(users));
+   .then(response => response.json())
+   .then(users => setMonsters(users));
   },[]);
 
   useEffect(() => {
@@ -22,19 +30,15 @@ const App = () => {
   }, [monsters, searchField]);
 
   const onSearchChange = (e) => {
+
     const searchFieldString = e.target.value.toLocaleLowerCase();
     setSearchField(searchFieldString);
   };
 
   return (
-    <div className='App'>
-      <h1 className='app-title'> Monsters Rolodex </h1>
-      <SearchBox
-        className='monsters-search-box'
-        onChangeHandler={onSearchChange}
-        placeholder='search monster' />
-      <CardList monsters={filteredMonsters}/>
-      </div>
+    <Routes>
+      <Route path='/' element={<Home  monsters={filteredMonsters} onChangeHandler={onSearchChange}/>}/>
+    </Routes>
     );
   }
 
